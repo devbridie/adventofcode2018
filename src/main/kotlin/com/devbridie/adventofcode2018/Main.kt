@@ -6,7 +6,7 @@ import kotlin.system.measureTimeMillis
 
 fun main(args: Array<String>) {
     val days = listOf(day1, day2)
-    val day = selectDat(days)
+    val day = selectDay(days)
     executeDay(day)
 }
 
@@ -16,7 +16,7 @@ fun executeDay(day: Day) {
     measureTimeMillis { print("Part 2: ${day.part2(input)}") }.also { println(" -- time: ${it}ms") }
 }
 
-private fun selectDat(day: Iterable<Day>): Day {
+private fun selectDay(day: Iterable<Day>): Day {
     while (true) {
         println("Completed days: " + day.map { it.number }.joinToString())
         print("Select day:")
