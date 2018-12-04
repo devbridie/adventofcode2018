@@ -31,16 +31,15 @@ private val solution2 = { data: String ->
 
 fun createSleepTimes(data: String): Map<Int, List<Time>> {
     var events = data.split("\n").map(::parseLine).sortByTime()
-    val timesSlept = mutableMapOf<Int, List<Time>>()
+    val timesSlept = mutableMapOf<Int, List<Time>>().withDefault { listOf() }
     while (events.isNotEmpty()) {
         val id = (events.first().event as GuardEvent.SwitchedGuard).toId
         val sleepEvents = events.drop(1).takeWhile { it.event !is GuardEvent.SwitchedGuard }
-        sleepEvents.chunked(2).forEach { (sleep, wake) ->
+        val sleepTimes = sleepEvents.chunked(2).flatMap { (sleep, wake) ->
             if (!(sleep.event is GuardEvent.FellAsleep && wake.event is GuardEvent.WokeUp)) error("Non-expected format")
-            (sleep.time.mi until wake.time.mi).forEach { min ->
-                timesSlept[id] = timesSlept.getOrDefault(id, listOf()) + sleep.time.withMinute(min)
-            }
+            (sleep.time.mi until wake.time.mi).map { sleep.time.withMinute(it) }
         }
+        timesSlept[id] = timesSlept.getValue(id) + sleepTimes
         events = events.drop(1 + sleepEvents.size)
     }
     return timesSlept
