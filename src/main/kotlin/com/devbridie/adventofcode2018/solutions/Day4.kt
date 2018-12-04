@@ -14,11 +14,10 @@ sealed class GuardEvent {
 
 private val solution1 = { data: String ->
     val timetable = createSleepTimes(data)
-    val (mostSleepGuard, mostSleptTimes) = timetable.maxBy { it.value.count() }!!
+    val (mostSleptGuard, mostSleptTimes) = timetable.maxBy { it.value.count() }!!
 
-    val minutes = mostSleptTimes.map { it.mi }
-    val minuteMostSlept = minutes.maxByCount()!!.value
-    mostSleepGuard * minuteMostSlept
+    val mostSleptMinute = mostSleptTimes.map { it.mi }.maxByCount()!!.value
+    mostSleptGuard * mostSleptMinute
 }
 
 private val solution2 = { data: String ->
